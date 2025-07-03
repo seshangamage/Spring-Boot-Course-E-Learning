@@ -35,23 +35,105 @@
     
     <div class="container mt-4">
       <div class="row">
-        <!-- Iterate through products -->
-        <div class="col-md-3 mb-4" th:each="product : ${products}">
+        <!-- Static Laptop 1 -->
+        <div class="col-md-3 mb-4">
           <div class="card h-100">
             <img 
-              th:src="@{'/images/'+${product.imageFileName}}" 
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf4DfSaTdiyKzDFFeVzYC1n7XzAPrEFczaKw&s" 
               class="card-img-top" 
-              alt="Product Image" 
-              style="height: 200px; object-fit: cover;"
+              alt="Dell XPS 13" 
+              style="height: 200px; object-fit: cover; background-color: #f8f9fa;"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             >
+            <div style="height: 200px; background-color: #f8f9fa; display: none; align-items: center; justify-content: center; color: #6c757d; font-weight: bold;">
+              Dell XPS 13
+            </div>
             <div class="card-body">
-              <h5 class="card-title" th:text="${product.name}"></h5>
-              <h6 class="card-subtitle mb-2 text-muted" th:text="${product.brand}"></h6>
+              <h5 class="card-title">Dell XPS 13</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Dell</h6>
               <p class="card-text">
-                <strong>Category:</strong> <span th:text="${product.category}"></span><br>
-                <strong>Price:</strong> $<span th:text="${product.price}"></span><br>
-                <strong>Info:</strong> <span th:text="${product.description}"></span><br>
-                <strong>Created At:</strong> <span th:text="${#dates.format(product.createdAt, 'yyyy-MM-dd')}"></span>
+                <strong>Category:</strong> Ultrabook<br>
+                <strong>Price:</strong> $1,299<br>
+                <strong>Info:</strong> Ultra-portable laptop with 13.3" InfinityEdge display<br>
+                <strong>Processor:</strong> Intel Core i7-1165G7
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Static Laptop 2 -->
+        <div class="col-md-3 mb-4">
+          <div class="card h-100">
+            <img 
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR24qVm4nO9emAyfaScWoXqu6BLrNDiaTBZjg&s" 
+              class="card-img-top" 
+              alt="MacBook Pro 14" 
+              style="height: 200px; object-fit: cover; background-color: #f8f9fa;"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            >
+            <div style="height: 200px; background-color: #f8f9fa; display: none; align-items: center; justify-content: center; color: #6c757d; font-weight: bold;">
+              MacBook Pro 14"
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">MacBook Pro 14"</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Apple</h6>
+              <p class="card-text">
+                <strong>Category:</strong> Professional<br>
+                <strong>Price:</strong> $1,999<br>
+                <strong>Info:</strong> Powerful laptop with M2 Pro chip and Liquid Retina XDR display<br>
+                <strong>Processor:</strong> Apple M2 Pro
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Static Laptop 3 -->
+        <div class="col-md-3 mb-4">
+          <div class="card h-100">
+            <img 
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdjFlAi9SWojRCjfET3SmtLj1bl3-IaEMWiA&s" 
+              class="card-img-top" 
+              alt="HP Spectre x360" 
+              style="height: 200px; object-fit: cover; background-color: #f8f9fa;"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            >
+            <div style="height: 200px; background-color: #f8f9fa; display: none; align-items: center; justify-content: center; color: #6c757d; font-weight: bold;">
+              HP Spectre x360
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">HP Spectre x360</h5>
+              <h6 class="card-subtitle mb-2 text-muted">HP</h6>
+              <p class="card-text">
+                <strong>Category:</strong> 2-in-1 Convertible<br>
+                <strong>Price:</strong> $1,149<br>
+                <strong>Info:</strong> Versatile 2-in-1 laptop with 360-degree hinge<br>
+                <strong>Processor:</strong> Intel Core i5-1235U
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Static Laptop 4 -->
+        <div class="col-md-3 mb-4">
+          <div class="card h-100">
+            <img 
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFWkvR2ppmEFubuWf-RJibhpKESw2xBlnyEA&s" 
+              class="card-img-top" 
+              alt="ASUS ROG Strix G15" 
+              style="height: 200px; object-fit: cover; background-color: #f8f9fa;"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            >
+            <div style="height: 200px; background-color: #f8f9fa; display: none; align-items: center; justify-content: center; color: #6c757d; font-weight: bold;">
+              ASUS ROG Strix G15
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">ASUS ROG Strix G15</h5>
+              <h6 class="card-subtitle mb-2 text-muted">ASUS</h6>
+              <p class="card-text">
+                <strong>Category:</strong> Gaming<br>
+                <strong>Price:</strong> $1,599<br>
+                <strong>Info:</strong> High-performance gaming laptop with RGB keyboard<br>
+                <strong>Processor:</strong> AMD Ryzen 7 5800H
               </p>
             </div>
           </div>
