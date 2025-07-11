@@ -26,6 +26,12 @@
             <a href="/" class="btn btn-outline-primary">
               <i class="fas fa-home"></i> Back to Store
             </a>
+            <a href="/login" class="btn btn-outline-success ml-2" sec:authorize="!isAuthenticated()">
+              <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            <a href="/user/register" class="btn btn-outline-info ml-2" sec:authorize="!isAuthenticated()">
+              <i class="fas fa-user-plus"></i> Register
+            </a>
           </nav>
           
           <!-- Success/Error Messages -->

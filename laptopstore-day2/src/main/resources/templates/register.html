@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    
+    <title>Register - Laptop Store</title>
+  </head>
+  <body class="bg-light">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+          <div class="card shadow-sm mt-4">
+            <div class="card-header bg-primary text-white text-center">
+              <h3><i class="fas fa-user-plus"></i> Create Account</h3>
+              <p class="mb-0">Join our laptop store community!</p>
+            </div>
+            <div class="card-body">
+              <!-- Success/Error Messages -->
+              <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              
+              <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <!-- Registration Form -->
+              <form th:action="@{/user/register}" method="post" th:object="${user}" id="registerForm">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="firstName">First Name</label>
+                      <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="Enter first name">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="lastName">Last Name</label>
+                      <input type="text" class="form-control" id="lastName" th:field="*{lastName}" placeholder="Enter last name">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="username">Username <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="username" th:field="*{username}" 
+                           placeholder="Choose a username" required>
+                  </div>
+                  <div id="usernameCheck" class="mt-1"></div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="email">Email <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    </div>
+                    <input type="email" class="form-control" id="email" th:field="*{email}" 
+                           placeholder="Enter email address" required>
+                  </div>
+                  <div id="emailCheck" class="mt-1"></div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="password">Password <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    </div>
+                    <input type="password" class="form-control" id="password" th:field="*{password}" 
+                           placeholder="Create a password" required minlength="6">
+                  </div>
+                  <small class="form-text text-muted">Password must be at least 6 characters long</small>
+                </div>
+                
+                <div class="form-group">
+                  <label for="confirmPassword">Confirm Password <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    </div>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" 
+                           placeholder="Confirm your password" required>
+                  </div>
+                  <div id="passwordMatch" class="mt-1"></div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="phone">Phone Number</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    </div>
+                    <input type="tel" class="form-control" id="phone" th:field="*{phone}" 
+                           placeholder="Enter phone number">
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="address">Address</label>
+                  <textarea class="form-control" id="address" th:field="*{address}" rows="2" 
+                            placeholder="Enter your address"></textarea>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="city">City</label>
+                      <input type="text" class="form-control" id="city" th:field="*{city}" placeholder="Enter city">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="state">State</label>
+                      <input type="text" class="form-control" id="state" th:field="*{state}" placeholder="Enter state">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="zipCode">ZIP Code</label>
+                      <input type="text" class="form-control" id="zipCode" th:field="*{zipCode}" placeholder="Enter ZIP code">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="country">Country</label>
+                      <input type="text" class="form-control" id="country" th:field="*{country}" placeholder="Enter country">
+                    </div>
+                  </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block" id="registerBtn">
+                  <i class="fas fa-user-plus"></i> Create Account
+                </button>
+              </form>
+              
+              <hr>
+              
+              <div class="text-center">
+                <p>Already have an account? <a href="/login">Login here</a></p>
+                <a href="/" class="btn btn-secondary">
+                  <i class="fas fa-home"></i> Back to Store
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+    <!-- Full jQuery for AJAX -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+      $(document).ready(function() {
+        // Check username availability
+        $('#username').on('blur', function() {
+          var username = $(this).val();
+          if (username.length > 0) {
+            $.get('/user/check-username?username=' + username, function(available) {
+              if (available) {
+                $('#usernameCheck').html('<small class="text-success"><i class="fas fa-check"></i> Username available</small>');
+              } else {
+                $('#usernameCheck').html('<small class="text-danger"><i class="fas fa-times"></i> Username already taken</small>');
+              }
+            });
+          } else {
+            $('#usernameCheck').html('');
+          }
+        });
+        
+        // Check email availability
+        $('#email').on('blur', function() {
+          var email = $(this).val();
+          if (email.length > 0) {
+            $.get('/user/check-email?email=' + email, function(available) {
+              if (available) {
+                $('#emailCheck').html('<small class="text-success"><i class="fas fa-check"></i> Email available</small>');
+              } else {
+                $('#emailCheck').html('<small class="text-danger"><i class="fas fa-times"></i> Email already registered</small>');
+              }
+            });
+          } else {
+            $('#emailCheck').html('');
+          }
+        });
+        
+        // Check password confirmation
+        $('#confirmPassword').on('keyup', function() {
+          var password = $('#password').val();
+          var confirmPassword = $(this).val();
+          
+          if (confirmPassword.length > 0) {
+            if (password === confirmPassword) {
+              $('#passwordMatch').html('<small class="text-success"><i class="fas fa-check"></i> Passwords match</small>');
+            } else {
+              $('#passwordMatch').html('<small class="text-danger"><i class="fas fa-times"></i> Passwords do not match</small>');
+            }
+          } else {
+            $('#passwordMatch').html('');
+          }
+        });
+        
+        // Form validation
+        $('#registerForm').on('submit', function(e) {
+          var password = $('#password').val();
+          var confirmPassword = $('#confirmPassword').val();
+          
+          if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Passwords do not match!');
+            return false;
+          }
+          
+          if (password.length < 6) {
+            e.preventDefault();
+            alert('Password must be at least 6 characters long!');
+            return false;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

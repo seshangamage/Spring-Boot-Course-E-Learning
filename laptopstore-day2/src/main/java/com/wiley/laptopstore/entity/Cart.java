@@ -17,6 +17,10 @@ public class Cart {
     @Column(name = "session_id")
     private String sessionId;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+    
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     
@@ -52,6 +56,14 @@ public class Cart {
     
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+    
+    public User getUser() {
+        return user;
+    }
+    
+    public void setUser(User user) {
+        this.user = user;
     }
     
     public LocalDateTime getCreatedAt() {
