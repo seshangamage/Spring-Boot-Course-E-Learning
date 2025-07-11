@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    
+    <title>Add New Laptop - Laptop Store</title>
+  </head>
+  <body>
+    <h1>Laptop Store</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Store</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/add-laptop">Add Laptop <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact Us</a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-md-8 offset-md-2">
+          <div class="card">
+            <div class="card-header">
+              <h3>Add New Laptop</h3>
+            </div>
+            <div class="card-body">
+              <!-- Success/Error Messages -->
+              <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              
+              <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <!-- Add Laptop Form -->
+              <form th:action="@{/add-laptop}" th:object="${laptop}" method="post" enctype="multipart/form-data">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="name">Laptop Name *</label>
+                      <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="brand">Brand *</label>
+                      <input type="text" class="form-control" id="brand" th:field="*{brand}" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="category">Category *</label>
+                      <select class="form-control" id="category" th:field="*{category}" required>
+                        <option value="">Select Category</option>
+                        <option value="Ultrabook">Ultrabook</option>
+                        <option value="Gaming">Gaming</option>
+                        <option value="Professional">Professional</option>
+                        <option value="2-in-1 Convertible">2-in-1 Convertible</option>
+                        <option value="Budget">Budget</option>
+                        <option value="Workstation">Workstation</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="price">Price ($) *</label>
+                      <input type="number" class="form-control" id="price" th:field="*{price}" step="0.01" min="0" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="processor">Processor *</label>
+                  <input type="text" class="form-control" id="processor" th:field="*{processor}" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="info">Description</label>
+                  <textarea class="form-control" id="info" th:field="*{info}" rows="3" 
+                            placeholder="Enter laptop description/specifications"></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="imageFile">Laptop Image</label>
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="imageFile" name="imageFile" accept="image/*">
+                    <label class="custom-file-label" for="imageFile">Choose image file...</label>
+                  </div>
+                  <small class="form-text text-muted">
+                    Upload an image file (JPG, PNG, GIF, etc.). Maximum file size: 10MB. The image will be automatically saved to the images folder.
+                  </small>
+                </div>
+
+                <div class="form-group text-center">
+                  <button type="submit" class="btn btn-primary btn-lg mr-2">Add Laptop</button>
+                  <a href="/" class="btn btn-secondary btn-lg">Cancel</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    <script>
+      // Update custom file input label when file is selected
+      document.getElementById('imageFile').addEventListener('change', function(e) {
+        var fileName = e.target.files[0] ? e.target.files[0].name : 'Choose image file...';
+        var label = document.querySelector('.custom-file-label');
+        label.textContent = fileName;
+      });
+    </script>
+  </body>
+</html>
