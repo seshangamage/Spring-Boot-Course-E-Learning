@@ -2,6 +2,7 @@ package com.wiley.laptopstore.controller;
 
 import com.wiley.laptopstore.entity.Laptop;
 import com.wiley.laptopstore.service.LaptopService;
+import com.wiley.laptopstore.service.CartService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,23 +31,32 @@ public class HomeController {
 
     @Autowired
     private LaptopService laptopService;
+    
+    @Autowired
+    private CartService cartService;
 
     // Directory to store uploaded images
     private final String UPLOAD_DIR = "src/main/resources/static/images/";
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Model model, HttpSession session) {
         logger.info("Accessing home page - displaying all laptops");
         try {
             List<Laptop> laptops = laptopService.getAllLaptops();
             logger.debug("Successfully retrieved {} laptops from database", laptops.size());
             
+            // Get cart count for current session
+            String sessionId = session.getId();
+            int cartCount = cartService.getCartItemCount(sessionId);
+            logger.debug("Cart count for session {}: {}", sessionId, cartCount);
+            
             model.addAttribute("title", "Wiley Laptop Store");
             model.addAttribute("welcomeMessage", "Welcome to Wiley Laptop Store!");
             model.addAttribute("description", "Discover the latest laptops with cutting-edge technology and unbeatable prices.");
             model.addAttribute("laptops", laptops);
+            model.addAttribute("cartCount", cartCount);
             
-            logger.info("Home page loaded successfully with {} laptops", laptops.size());
+            logger.info("Home page loaded successfully with {} laptops, cart count: {}", laptops.size(), cartCount);
             return "home";
         } catch (Exception e) {
             logger.error("Error loading home page: {}", e.getMessage(), e);

@@ -60,6 +60,22 @@ public class LaptopService {
         }
     }
     
+    public Optional<Laptop> findById(Long id) {
+        logger.debug("Finding laptop with ID: {}", id);
+        try {
+            Optional<Laptop> laptop = laptopRepository.findById(id);
+            if (laptop.isPresent()) {
+                logger.info("Found laptop: {} (ID: {})", laptop.get().getName(), id);
+            } else {
+                logger.warn("Laptop with ID {} not found", id);
+            }
+            return laptop;
+        } catch (Exception e) {
+            logger.error("Error finding laptop with ID {}: {}", id, e.getMessage(), e);
+            throw e;
+        }
+    }
+    
     public Laptop getLaptopById(Long id) {
         logger.debug("Retrieving laptop with ID: {}", id);
         try {

@@ -48,6 +48,15 @@
           </div>
         </form>
         <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/cart/view">
+              <i class="fas fa-shopping-cart"></i> Cart
+              <span class="badge badge-primary" 
+                    id="cart-count" 
+                    th:text="${cartCount}" 
+                    th:style="${cartCount > 0} ? '' : 'display: none;'">0</span>
+            </a>
+          </li>
           <li class="nav-item" sec:authorize="!isAuthenticated()">
             <a class="nav-link" href="/login">
               <i class="fas fa-sign-in-alt"></i> Admin Login
@@ -114,12 +123,22 @@
                   <strong>Info:</strong> <span th:text="${laptop.info}">Info</span><br>
                   <strong>Processor:</strong> <span th:text="${laptop.processor}">Processor</span>
                 </p>
-                <div class="text-center" sec:authorize="hasRole('ADMIN')">
-                  <form th:action="@{/delete-laptop}" method="post" style="display: inline;" 
-                        onsubmit="return confirm('Are you sure you want to delete this laptop?');">
-                    <input type="hidden" name="id" th:value="${laptop.id}">
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                <div class="text-center">
+                  <form th:action="@{/cart/add}" method="post" style="display: inline;">
+                    <input type="hidden" name="laptopId" th:value="${laptop.id}">
+                    <button type="submit" class="btn btn-primary btn-sm mr-2">
+                      <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
                   </form>
+                  <div sec:authorize="hasRole('ADMIN')" style="display: inline;">
+                    <form th:action="@{/delete-laptop}" method="post" style="display: inline;" 
+                          onsubmit="return confirm('Are you sure you want to delete this laptop?');">
+                      <input type="hidden" name="id" th:value="${laptop.id}">
+                      <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i> Delete
+                      </button>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -156,5 +175,35 @@
         margin-left: 10px;
       }
     </style>
+    
+    <script>
+      // Update cart count on page load
+      $(document).ready(function() {
+        updateCartCount();
+      });
+      
+      // Function to update cart count
+      function updateCartCount() {
+        $.get('/cart/count', function(data) {
+          $('#cart-count').text(data);
+          if (data > 0) {
+            $('#cart-count').show();
+          } else {
+            $('#cart-count').hide();
+          }
+        }).fail(function() {
+          // If request fails, hide the cart count
+          $('#cart-count').hide();
+        });
+      }
+      
+      // Update cart count when page gains focus (when user returns from another page)
+      $(window).on('focus', function() {
+        updateCartCount();
+      });
+      
+      // Update cart count periodically (every 30 seconds)
+      setInterval(updateCartCount, 30000);
+    </script>
   </body>
 </html>

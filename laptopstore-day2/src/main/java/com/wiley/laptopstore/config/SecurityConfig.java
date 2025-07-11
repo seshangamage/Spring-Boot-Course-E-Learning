@@ -26,7 +26,7 @@ public class SecurityConfig {
         
         http
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/search-laptops", "/css/**", "/js/**", "/images/**", "/h2-console/**").permitAll()
+                .requestMatchers("/", "/search-laptops", "/css/**", "/js/**", "/images/**", "/h2-console/**", "/cart/**").permitAll()
                 .requestMatchers("/add-laptop/**", "/delete-laptop/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
