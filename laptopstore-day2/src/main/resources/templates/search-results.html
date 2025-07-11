@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search Results</title>
+</head>
+<body>
+    <!-- Search Results Fragment -->
+    <div th:fragment="laptop-results">
+        <div class="row">
+            <div class="col-12" th:if="${laptops.isEmpty()}">
+                <div class="alert alert-info text-center">
+                    <h5>No laptops found</h5>
+                    <p>Try adjusting your search criteria or <a href="/">view all laptops</a></p>
+                </div>
+            </div>
+            
+            <!-- Dynamic Laptop Cards from Search Results -->
+            <div class="col-md-3 mb-4" th:each="laptop : ${laptops}">
+                <div class="card h-100">
+                    <img 
+                        th:src="${laptop.imagePath}" 
+                        class="card-img-top" 
+                        th:alt="${laptop.name}" 
+                        style="height: 200px; object-fit: cover; background-color: #f8f9fa;"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                    >
+                    <div style="height: 200px; background-color: #f8f9fa; display: none; align-items: center; justify-content: center; color: #6c757d; font-weight: bold;" th:text="${laptop.name}">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${laptop.name}">Laptop Name</h5>
+                        <h6 class="card-subtitle mb-2 text-muted" th:text="${laptop.brand}">Brand</h6>
+                        <p class="card-text">
+                            <strong>Category:</strong> <span th:text="${laptop.category}">Category</span><br>
+                            <strong>Price:</strong> $<span th:text="${laptop.price}">Price</span><br>
+                            <strong>Info:</strong> <span th:text="${laptop.info}">Info</span><br>
+                            <strong>Processor:</strong> <span th:text="${laptop.processor}">Processor</span>
+                        </p>
+                        <div class="text-center">
+                            <form th:action="@{/delete-laptop}" method="post" style="display: inline;" 
+                                  onsubmit="return confirm('Are you sure you want to delete this laptop?');">
+                                <input type="hidden" name="id" th:value="${laptop.id}">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

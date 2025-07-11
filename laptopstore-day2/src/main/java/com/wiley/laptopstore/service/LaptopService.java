@@ -31,6 +31,35 @@ public class LaptopService {
         }
     }
     
+    public List<Laptop> searchLaptops(String query) {
+        logger.debug("Searching laptops with query: {}", query);
+        try {
+            if (query == null || query.trim().isEmpty()) {
+                logger.debug("Empty search query, returning all laptops");
+                return getAllLaptops();
+            }
+            
+            String searchTerm = query.trim().toLowerCase();
+            List<Laptop> allLaptops = laptopRepository.findAll();
+            
+            List<Laptop> searchResults = allLaptops.stream()
+                .filter(laptop -> 
+                    laptop.getName().toLowerCase().contains(searchTerm) ||
+                    laptop.getBrand().toLowerCase().contains(searchTerm) ||
+                    laptop.getCategory().toLowerCase().contains(searchTerm) ||
+                    laptop.getProcessor().toLowerCase().contains(searchTerm) ||
+                    (laptop.getInfo() != null && laptop.getInfo().toLowerCase().contains(searchTerm))
+                )
+                .collect(java.util.stream.Collectors.toList());
+            
+            logger.info("Search for '{}' returned {} laptops", query, searchResults.size());
+            return searchResults;
+        } catch (Exception e) {
+            logger.error("Error searching laptops with query '{}': {}", query, e.getMessage(), e);
+            throw e;
+        }
+    }
+    
     public Laptop getLaptopById(Long id) {
         logger.debug("Retrieving laptop with ID: {}", id);
         try {

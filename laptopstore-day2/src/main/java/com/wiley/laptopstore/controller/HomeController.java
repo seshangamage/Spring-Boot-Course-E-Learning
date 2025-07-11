@@ -116,6 +116,23 @@ public class HomeController {
         return "redirect:/";
     }
     
+    @GetMapping("/search-laptops")
+    public String searchLaptops(@RequestParam(value = "searchQuery", required = false) String searchQuery, 
+                               Model model) {
+        logger.info("Searching laptops with query: {}", searchQuery);
+        
+        try {
+            List<Laptop> laptops = laptopService.searchLaptops(searchQuery);
+            model.addAttribute("laptops", laptops);
+            logger.info("Search completed successfully, found {} laptops", laptops.size());
+            return "search-results :: laptop-results";
+        } catch (Exception e) {
+            logger.error("Error searching laptops with query '{}': {}", searchQuery, e.getMessage(), e);
+            model.addAttribute("laptops", List.of());
+            return "search-results :: laptop-results";
+        }
+    }
+    
     private String saveImage(MultipartFile imageFile) throws IOException {
         logger.debug("Starting image save process for file: {}", imageFile.getOriginalFilename());
         
