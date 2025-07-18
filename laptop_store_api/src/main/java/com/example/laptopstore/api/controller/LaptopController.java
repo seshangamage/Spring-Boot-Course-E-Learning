@@ -14,7 +14,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/laptops")
-@CrossOrigin(origins = "*") // Allow CORS for all origins (configure properly for production)
 public class LaptopController {
     
     private final LaptopService laptopService;
