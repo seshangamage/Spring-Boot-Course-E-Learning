@@ -1,40 +1,96 @@
 # Laptop Store API
 
-A RESTful API for managing a laptop store inventory with full CRUD operations.
+A RESTful API for managing a laptop store inventory with full CRUD operations using MySQL database.
 
 ## Features
 
 - Complete CRUD operations for laptops
 - Advanced search and filtering capabilities
 - Data validation and error handling
-- In-memory data storage for simplicity
+- MySQL database integration with JPA/Hibernate
 - Sample data initialization
 - Comprehensive API documentation
+- Transaction management
 
 ## Technologies Used
 
 - Java 24
 - Spring Boot 3.5.3
-- Spring Web (REST APIs)
-- Bean Validation
+- Spring Data JPA
+- MySQL 8.0
+- Hibernate ORM
 - Maven
-- In-memory data storage
+- Bean Validation
 
-## Getting Started
-
-### Prerequisites
+## Prerequisites
 
 - Java 24 or higher
 - Maven 3.6 or higher
+- MySQL 8.0 or higher
+- MySQL Workbench (optional, for database management)
+
+## Database Setup
+
+### 1. Install MySQL
+Download and install MySQL from [https://dev.mysql.com/downloads/](https://dev.mysql.com/downloads/)
+
+### 2. Create Database
+Run the provided SQL script to set up the database:
+
+```sql
+-- Run in MySQL Command Line or MySQL Workbench
+CREATE DATABASE IF NOT EXISTS laptop_store_db;
+USE laptop_store_db;
+```
+
+Or execute the provided script file:
+```bash
+mysql -u root -p < database-setup.sql
+```
+
+### 3. Configure Database Connection
+Update the `application.properties` file with your MySQL credentials:
+
+```properties
+# Database Configuration
+spring.datasource.url=jdbc:mysql://localhost:3306/laptop_store_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+spring.datasource.username=root
+spring.datasource.password=your_mysql_password
+```
+
+## Getting Started
 
 ### Running the Application
 
 1. Clone the repository or navigate to the project directory
-2. Run the application using Maven:
+2. Ensure MySQL is running on your system
+3. Update database credentials in `application.properties`
+4. Run the application using Maven:
    ```bash
    mvn spring-boot:run
    ```
-3. The API will be available at `http://localhost:8080`
+5. The API will be available at `http://localhost:8080`
+
+### Database Schema
+
+The application automatically creates the following table structure:
+
+```sql
+CREATE TABLE laptops (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    brand VARCHAR(50) NOT NULL,
+    model VARCHAR(100) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    description VARCHAR(500),
+    processor VARCHAR(100) NOT NULL,
+    ram_size_gb INT NOT NULL,
+    storage_size_gb INT NOT NULL,
+    storage_type VARCHAR(50),
+    screen_size VARCHAR(50),
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP
+);
+```
 
 ## API Endpoints
 
@@ -134,15 +190,36 @@ The application initializes with the following sample laptops:
 4. **Lenovo ThinkPad X1 Carbon** - $1,599.99 (Intel i7, 16GB RAM, 1TB SSD)
 5. **ASUS ROG Strix G15** - $1,399.99 (AMD Ryzen 7, 16GB RAM, 512GB SSD)
 
-## Data Storage
+## Database Features
 
-The application uses **in-memory data storage** with the following characteristics:
+### Persistent Storage
+- Data persists across application restarts
+- ACID compliance with MySQL transactions
+- Automatic schema creation/updates with Hibernate
 
-- Data is stored in a ConcurrentHashMap for thread safety
-- IDs are auto-generated using AtomicLong
-- Data persists only during application runtime
-- Data is reset on each application restart
-- No external database dependencies required
+### Connection Pooling
+- HikariCP connection pool for optimal performance
+- Configurable pool settings for production environments
+
+### Query Optimization
+- Indexed columns for fast searching
+- Custom JPQL queries for complex filtering
+- Query logging for debugging and optimization
+
+## Configuration Options
+
+### Development Environment
+```properties
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+```
+
+### Production Environment
+```properties
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=false
+spring.datasource.hikari.maximum-pool-size=20
+```
 
 ## Error Handling
 
@@ -224,26 +301,64 @@ curl http://localhost:8080/api/laptops/search/brand/Dell
 
 ## Development Notes
 
-- The application uses in-memory storage, so data is reset on each restart
-- No external database setup required
+- The application uses MySQL for persistent data storage
+- Database schema is automatically created/updated by Hibernate
+- SQL queries are logged to console for debugging (can be disabled in production)
 - CORS is enabled for all origins (configure appropriately for production)
 - Validation annotations ensure data integrity
-- Thread-safe operations using ConcurrentHashMap
+- Transaction management ensures data consistency
 
-## Advantages of In-Memory Storage
+## Advantages of MySQL Integration
 
-- **Simple Setup**: No database configuration required
-- **Fast Performance**: All operations are in-memory
-- **No Dependencies**: No need for database drivers or external services
-- **Development Friendly**: Quick to start and test
-- **Lightweight**: Minimal resource usage
+- **Persistent Storage**: Data survives application restarts
+- **ACID Compliance**: Reliable transactions and data integrity
+- **Scalability**: Can handle large datasets efficiently
+- **Query Performance**: Optimized with proper indexing
+- **Backup & Recovery**: Standard database backup solutions
+- **Multi-user Support**: Concurrent access with proper locking
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Connection Refused Error**
+   - Ensure MySQL server is running
+   - Check if port 3306 is available
+   - Verify database credentials in application.properties
+
+2. **Database Access Denied**
+   - Check username and password in application.properties
+   - Ensure the MySQL user has proper permissions
+   - Verify database exists
+
+3. **Schema/Table Not Found**
+   - Ensure `spring.jpa.hibernate.ddl-auto=update` is set
+   - Check if the application has permissions to create tables
+   - Verify the database name in the connection URL
+
+### MySQL Commands
+
+```sql
+-- Check if database exists
+SHOW DATABASES;
+
+-- Check tables in database
+USE laptop_store_db;
+SHOW TABLES;
+
+-- View table structure
+DESCRIBE laptops;
+
+-- Check sample data
+SELECT * FROM laptops LIMIT 5;
+```
 
 ## Future Enhancements
 
-- Add persistent storage (File-based or Database)
-- Add authentication and authorization
-- Implement pagination for large datasets
-- Add image upload functionality
+- Add database migration scripts with Flyway
+- Implement database clustering for high availability
+- Add read replicas for improved performance
+- Implement database monitoring and alerting
 - Add comprehensive unit and integration tests
-- Implement caching strategies
+- Implement caching with Redis
 - Add API documentation with Swagger/OpenAPI

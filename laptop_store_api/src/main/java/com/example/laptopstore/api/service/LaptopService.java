@@ -4,12 +4,14 @@ import com.example.laptopstore.api.entity.Laptop;
 import com.example.laptopstore.api.repository.LaptopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class LaptopService {
     
     private final LaptopRepository laptopRepository;
@@ -34,6 +36,7 @@ public class LaptopService {
     /**
      * Get all laptops
      */
+    @Transactional(readOnly = true)
     public List<Laptop> getAllLaptops() {
         return laptopRepository.findAll();
     }
@@ -41,6 +44,7 @@ public class LaptopService {
     /**
      * Get laptop by ID
      */
+    @Transactional(readOnly = true)
     public Optional<Laptop> getLaptopById(Long id) {
         return laptopRepository.findById(id);
     }
@@ -88,6 +92,7 @@ public class LaptopService {
     /**
      * Search laptops by brand
      */
+    @Transactional(readOnly = true)
     public List<Laptop> getLaptopsByBrand(String brand) {
         return laptopRepository.findByBrandIgnoreCase(brand);
     }
@@ -95,6 +100,7 @@ public class LaptopService {
     /**
      * Search laptops by model keyword
      */
+    @Transactional(readOnly = true)
     public List<Laptop> getLaptopsByModel(String model) {
         return laptopRepository.findByModelContainingIgnoreCase(model);
     }
@@ -102,6 +108,7 @@ public class LaptopService {
     /**
      * Search laptops by price range
      */
+    @Transactional(readOnly = true)
     public List<Laptop> getLaptopsByPriceRange(BigDecimal minPrice, BigDecimal maxPrice) {
         return laptopRepository.findByPriceBetween(minPrice, maxPrice);
     }
@@ -109,6 +116,7 @@ public class LaptopService {
     /**
      * Search laptops by RAM size
      */
+    @Transactional(readOnly = true)
     public List<Laptop> getLaptopsByRamSize(Integer ramSize) {
         return laptopRepository.findByRamSizeGB(ramSize);
     }
@@ -116,6 +124,7 @@ public class LaptopService {
     /**
      * Search laptops by minimum storage size
      */
+    @Transactional(readOnly = true)
     public List<Laptop> getLaptopsByMinStorageSize(Integer storageSize) {
         return laptopRepository.findByStorageSizeGBGreaterThanEqual(storageSize);
     }
@@ -123,6 +132,7 @@ public class LaptopService {
     /**
      * Search laptops by processor keyword
      */
+    @Transactional(readOnly = true)
     public List<Laptop> getLaptopsByProcessor(String processor) {
         return laptopRepository.findByProcessorContainingIgnoreCase(processor);
     }
@@ -130,6 +140,7 @@ public class LaptopService {
     /**
      * Advanced search with multiple filters
      */
+    @Transactional(readOnly = true)
     public List<Laptop> searchLaptops(String brand, BigDecimal minPrice, BigDecimal maxPrice, 
                                      Integer minRam, Integer minStorage) {
         return laptopRepository.findLaptopsWithFilters(brand, minPrice, maxPrice, minRam, minStorage);

@@ -1,58 +1,72 @@
 package com.example.laptopstore.api.entity;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "laptops")
 public class Laptop {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @NotBlank(message = "Brand is required")
     @Size(max = 50, message = "Brand must not exceed 50 characters")
+    @Column(nullable = false, length = 50)
     private String brand;
     
     @NotBlank(message = "Model is required")
     @Size(max = 100, message = "Model must not exceed 100 characters")
+    @Column(nullable = false, length = 100)
     private String model;
     
     @NotNull(message = "Price is required")
     @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than 0")
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
     
     @Size(max = 500, message = "Description must not exceed 500 characters")
+    @Column(length = 500)
     private String description;
     
     @NotBlank(message = "Processor is required")
     @Size(max = 100, message = "Processor must not exceed 100 characters")
+    @Column(nullable = false, length = 100)
     private String processor;
     
     @NotNull(message = "RAM is required")
     @Min(value = 1, message = "RAM must be at least 1 GB")
+    @Column(name = "ram_size_gb", nullable = false)
     private Integer ramSizeGB;
     
     @NotNull(message = "Storage is required")
     @Min(value = 1, message = "Storage must be at least 1 GB")
+    @Column(name = "storage_size_gb", nullable = false)
     private Integer storageSizeGB;
     
     @Size(max = 50, message = "Storage type must not exceed 50 characters")
+    @Column(name = "storage_type", length = 50)
     private String storageType; // SSD, HDD, etc.
     
     @Size(max = 50, message = "Screen size must not exceed 50 characters")
+    @Column(name = "screen_size", length = 50)
     private String screenSize;
     
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+    
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
     
     // Constructors
     public Laptop() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
     
     public Laptop(String brand, String model, BigDecimal price, String description, 
                   String processor, Integer ramSizeGB, Integer storageSizeGB) {
-        this();
         this.brand = brand;
         this.model = model;
         this.price = price;
@@ -62,8 +76,15 @@ public class Laptop {
         this.storageSizeGB = storageSizeGB;
     }
     
-    // Method to update timestamps
-    public void updateTimestamp() {
+    // JPA lifecycle methods
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+    
+    @PreUpdate
+    protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
     
