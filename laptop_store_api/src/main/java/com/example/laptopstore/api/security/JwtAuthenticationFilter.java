@@ -1,5 +1,7 @@
 package com.example.laptopstore.api.security;
 
+import com.example.laptopstore.api.entity.JwtToken;
+import com.example.laptopstore.api.service.JwtTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,12 +17,16 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+    
+    @Autowired
+    private JwtTokenService jwtTokenService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, 
@@ -37,31 +43,41 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (Exception e) {
-                logger.warn("Unable to get JWT Token or JWT Token has expired");
+                logger.warn("Unable to get JWT Token or JWT Token has expired: " + e.getMessage());
             }
         }
 
         // Once we get the token validate it
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             
-            // Validate token
-            if (jwtTokenUtil.validateToken(jwtToken)) {
+            // Validate token against database
+            if (jwtTokenService.validateToken(jwtToken)) {
                 
-                // Extract role from token
-                String role = jwtTokenUtil.getRoleFromToken(jwtToken);
+                // Get token details from database
+                Optional<JwtToken> tokenDetailsOpt = jwtTokenService.getTokenDetails(jwtToken);
                 
-                // Create authentication token
-                UsernamePasswordAuthenticationToken authToken = 
-                    new UsernamePasswordAuthenticationToken(
-                        username, 
-                        null, 
-                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role))
-                    );
-                
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                
-                // Set authentication in context
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                if (tokenDetailsOpt.isPresent()) {
+                    JwtToken tokenDetails = tokenDetailsOpt.get();
+                    
+                    // Extract role from token or database
+                    String role = jwtTokenUtil.getRoleFromToken(jwtToken);
+                    if (role == null) {
+                        role = tokenDetails.getUser().getRole().name();
+                    }
+                    
+                    // Create authentication token
+                    UsernamePasswordAuthenticationToken authToken = 
+                        new UsernamePasswordAuthenticationToken(
+                            username, 
+                            null, 
+                            Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role))
+                        );
+                    
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    
+                    // Set authentication in context
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
         }
         

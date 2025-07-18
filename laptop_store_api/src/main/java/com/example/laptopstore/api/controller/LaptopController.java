@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -26,8 +27,10 @@ public class LaptopController {
     /**
      * CREATE - Add a new laptop
      * POST /api/laptops
+     * Only ADMIN and MODERATOR roles can create laptops
      */
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> createLaptop(@Valid @RequestBody Laptop laptop) {
         try {
             Laptop createdLaptop = laptopService.createLaptop(laptop);
@@ -78,8 +81,10 @@ public class LaptopController {
     /**
      * UPDATE - Update an existing laptop
      * PUT /api/laptops/{id}
+     * Only ADMIN and MODERATOR roles can update laptops
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> updateLaptop(@PathVariable Long id, @Valid @RequestBody Laptop laptopDetails) {
         try {
             Laptop updatedLaptop = laptopService.updateLaptop(id, laptopDetails);
@@ -103,8 +108,10 @@ public class LaptopController {
     /**
      * DELETE - Delete a laptop
      * DELETE /api/laptops/{id}
+     * Only ADMIN role can delete laptops
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteLaptop(@PathVariable Long id) {
         try {
             laptopService.deleteLaptop(id);
