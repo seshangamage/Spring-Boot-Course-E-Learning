@@ -1,0 +1,4 @@
+I need to create an api with CRUD operations which will be used for a laptopstore where i need to connect that to mysql db
+
+
+can we exclude lombok from the code
