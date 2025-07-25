@@ -2,3 +2,6 @@ I need to create an api with CRUD operations which will be used for a laptopstor
 
 
 can we exclude lombok from the code
+
+
+i want to insert 5 laptops to the table i need the sql file for that 
