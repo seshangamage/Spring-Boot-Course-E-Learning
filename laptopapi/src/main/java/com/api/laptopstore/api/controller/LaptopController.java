@@ -4,6 +4,7 @@ import com.api.laptopstore.api.model.Laptop;
 import com.api.laptopstore.api.repository.LaptopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,8 +60,9 @@ public class LaptopController {
         return ResponseEntity.ok(updatedLaptop);
     }
 
-    // DELETE - Delete a laptop
+    // DELETE - Delete a laptop (Admin only)
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteLaptop(@PathVariable Long id) {
         Laptop laptop = laptopRepository.findById(id)
             .orElse(null);

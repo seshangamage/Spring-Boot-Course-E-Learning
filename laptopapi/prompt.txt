@@ -5,3 +5,18 @@ can we exclude lombok from the code
 
 
 i want to insert 5 laptops to the table i need the sql file for that 
+
+I need to create an Oauth2 tojken to access this site and ussers will be calling the api with the bearer token 
+
+
+
+i want to remove the deprectaed methods from this
+
+
+give smaple curl that i can used with posrtman for /register call
+
+
+give me a sample api call to used to get the Token from register
+
+
+i want to make the Laptop Delete option for Admin only

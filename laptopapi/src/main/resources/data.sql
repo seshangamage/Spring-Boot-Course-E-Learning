@@ -1,4 +1,4 @@
--- Insert sample laptop data
+-- Insert sample laptop data only if the table is empty
 INSERT INTO laptop (brand, model, processor, ram, storage, price, description)
 VALUES 
     ('Dell', 'XPS 15', 'Intel Core i7-12700H', 16, 512, 1799.99, 'Premium ultrabook with 15.6-inch 4K OLED display'),
