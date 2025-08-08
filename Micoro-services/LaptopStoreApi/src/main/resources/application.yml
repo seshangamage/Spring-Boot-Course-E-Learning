@@ -1,0 +1,74 @@
+server:
+  port: 5000
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      httpclient:
+        wiretap: true
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+        - AddResponseHeader=X-Response-Source, API-Gateway
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: laptop-service
+          uri: lb://laptop-service
+          predicates:
+            - Path=/laptop-service/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: laptopCircuitBreaker
+                fallbackUri: forward:/fallback
+        - id: desktop-service
+          uri: lb://desktop-service
+          predicates:
+            - Path=/desktop-service/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: desktopCircuitBreaker
+                fallbackUri: forward:/fallback
+        - id: mobile-phone-service
+          uri: lb://mobile-phone-service
+          predicates:
+            - Path=/mobile-phone-service/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: mobileCircuitBreaker
+                fallbackUri: forward:/fallback
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+    registry-fetch-interval-seconds: 5
+    initial-instance-info-replication-interval-seconds: 5
+    instance-info-replication-interval-seconds: 5
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.cloud.netflix.eureka: DEBUG
+    org.springframework.web: DEBUG
+    reactor.netty: DEBUG
+    org.springframework.http.server.reactive: DEBUG
+    org.springframework.web.reactive: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

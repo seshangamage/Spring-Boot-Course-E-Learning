@@ -1,0 +1,4 @@
+com\mobile\MobilePhoneApplication.class
+com\mobile\entity\MobilePhone.class
+com\mobile\repository\MobilePhoneRepository.class
+com\mobile\controller\MobilePhoneController.class

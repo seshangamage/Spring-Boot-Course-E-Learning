@@ -1,0 +1,7 @@
+com\example\apigateway\controller\FallbackController.class
+com\example\apigateway\ApiGatewayApplication.class
+com\example\apigateway\controller\HealthCheckController.class
+com\example\apigateway\config\ErrorHandlerConfig.class
+com\example\apigateway\config\GatewayConfig.class
+com\example\apigateway\config\WebConfig.class
+com\example\apigateway\config\ServiceDiscoveryConfig.class
