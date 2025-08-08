@@ -1,0 +1,5 @@
+com\desktop\api\controller\DesktopController.class
+com\desktop\api\entity\Desktop.class
+com\desktop\api\DesktopBackendApiApplication.class
+com\desktop\api\entity\User.class
+com\desktop\api\repository\DesktopRepository.class
