@@ -1,0 +1,5 @@
+com\laptopapi\entity\Laptop.class
+com\laptopapi\LaptopApiApplication.class
+com\laptopapi\service\LaptopService.class
+com\laptopapi\controller\LaptopController.class
+com\laptopapi\repository\LaptopRepository.class
